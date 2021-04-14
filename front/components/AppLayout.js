@@ -3,6 +3,7 @@ import PropType from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
@@ -12,8 +13,11 @@ const SearchInput = styled(Input.Search)`
 `
 
 const AppLayout = ({children}) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);///dummy data for login without server
-    
+    // const [isLoggedIn, setIsLoggedIn] = useState(false); ///dummy data for login without server
+    // redux/reducers 의 중앙관리 덕에 더이상 필요하지 않음.
+
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);      //useSelector는 npm i react-redux 필요
+    //  == const { isLoggedIn } = useSelector((state) => state.user);  구조분해 할당.
     return (
         <div>
             <Menu mode="horizontal">
@@ -32,7 +36,8 @@ const AppLayout = ({children}) => {
             </Menu>
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn} /> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>}
+                    {/* {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn} /> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>} */}
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
                 <Col xs={24} md={12}>
                     {children}

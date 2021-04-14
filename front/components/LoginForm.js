@@ -2,9 +2,11 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import useInput from '../hooks/useInput';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../reducers/user';
 
 //Styled-component 방식. 이것 대신 useMemo 를 써도 됨. useMemo는 값을 저장하는 기능.
 const ButtonWrapper = styled.div`       
@@ -14,8 +16,9 @@ const ButtonWrapper = styled.div`
 const FormWrapper = styled(Form)`
     padding: 10px;
 `;
-
-const LoginForm = ({ setIsLoggedIn }) => {
+// const LoginForm = ({ setIsLoggedIn }) => 
+const LoginForm = () => {
+    const dispatch = useDispatch();
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
 
@@ -33,7 +36,8 @@ const LoginForm = ({ setIsLoggedIn }) => {
     // const style = useMemo(() => ({ marginTop: 10}), []);
 
     const onSubmitForm = useCallback(() => {
-        setIsLoggedIn(true);
+        // setIsLoggedIn(true);
+        dispatch(loginAction({ id, password }));
     }, [id, password]);
 
     return (
@@ -62,8 +66,8 @@ const LoginForm = ({ setIsLoggedIn }) => {
     );
 }
 
-LoginForm.propTypes = {
-    setIsLoggedIn: PropTypes.func.isRequired,
-};
+// LoginForm.propTypes = {
+//     setIsLoggedIn: PropTypes.func.isRequired,
+// };
 
 export default LoginForm;
