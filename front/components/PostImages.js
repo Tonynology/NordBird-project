@@ -15,7 +15,7 @@ const PostImages = ({ images }) => {
         return (
             <div>
                 {/* //role="presentation" 는 이미지 reader한테 누를 필요 없는 기능들을 알려줌. */}
-                <img role="presentation" src={images[0].src} alt={Image[0].src} onClick={onZoom} /> 
+                <img role="presentation" src={images[0].src} alt={images[0].src} onClick={onZoom} /> 
                 {showImageZoom && <ImagesZoom images={images} onClose={onClise} />}
             </div>
         );
@@ -24,8 +24,8 @@ const PostImages = ({ images }) => {
         return (
             <div>
                 {/* //role="presentation" 는 이미지 reader한테 누를 필요 없는 기능들을 알려줌.  각 이미지 width를 절반씩.*/}
-                <img role="presentation" style={{ width="50%", display: 'inline-blick' }} src={images[0].src} alt={Image[0].src} onClick={onZoom} /> 
-                <img role="presentation" style={{ width="50%", display: 'inline-blick' }} src={images[1].src} alt={Image[1].src} onClick={onZoom} /> 
+                <img role="presentation" src={images[0].src} alt={images[0].src} width="50%" onClick={onZoom} />
+                <img role="presentation" src={images[1].src} alt={images[1].src} width="50%" onClick={onZoom} />
                 {showImageZoom && <ImagesZoom image={images} onClose={onClise} />}
             </div>
         );
@@ -33,7 +33,7 @@ const PostImages = ({ images }) => {
     return (
         <div>
             <div>
-                <img role="presentation" width="50%" src={images[1].src} alt={Image[1].src} onClick={onZoom} /> 
+                <img role="presentation" width="50%" src={images[0].src} alt={images[0].src} onClick={onZoom} /> 
                 <div
                     role="presentation"
                     style={{ display: 'inline-block', width: '50%', textAlign:'center', verticalAlign:'middle'}}
@@ -45,7 +45,7 @@ const PostImages = ({ images }) => {
                     show personal image
                 </div>
             </div>
-            {showImageZoom && <ImagesZoom image={images} onClose={onClise} />}
+            {showImageZoom && <ImagesZoom images={images} onClose={onClose} />}
         </div>
     )
 };

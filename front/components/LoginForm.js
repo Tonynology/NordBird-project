@@ -5,7 +5,7 @@ import styled from 'styled-components';
 // import PropTypes from 'prop-types';
 
 import useInput from '../hooks/useInput';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginAction } from '../reducers/user';
 
 //Styled-component 방식. 이것 대신 useMemo 를 써도 됨. useMemo는 값을 저장하는 기능.
@@ -19,6 +19,7 @@ const FormWrapper = styled(Form)`
 // const LoginForm = ({ setIsLoggedIn }) => 
 const LoginForm = () => {
     const dispatch = useDispatch();
+    const { isLoggingIn } = useSelector((state) => state.user);
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
 
@@ -37,7 +38,7 @@ const LoginForm = () => {
 
     const onSubmitForm = useCallback(() => {
         // setIsLoggedIn(true);
-        dispatch(loginAction({ id, password }));
+        dispatch(loginRequestAction({ id, password }));
     }, [id, password]);
 
     return (
@@ -59,7 +60,7 @@ const LoginForm = () => {
                 />
             </div>
             <ButtonWrapper>
-                <Button type="primary" htmlType="submit" loading={false}>Login</Button>
+                <Button type="primary" htmlType="submit" loading={isLoggingIn}>Login</Button>
                 <Link href="/signup"><a><Button>Signup</Button></a></Link>
             </ButtonWrapper>
         </FormWrapper>
