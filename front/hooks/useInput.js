@@ -5,5 +5,5 @@ export default (initialValue = null) => {
     const handler = useCallback((e) => {
         setValue(e.target.value);
     }, []);
-    return [value, handler];        //usestate과 useCallback을 함께 사용하
+    return [value, handler, setValue];        //usestate과 useCallback을 함께 사용하
 }

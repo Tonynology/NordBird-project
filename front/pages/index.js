@@ -9,12 +9,12 @@ import PostCard from '../components/PostCard';
 
 
 const Home = () => {
-    const { isLoggedIn } = useSelector((state) => state.user);      //구조분해.
+    const { me } = useSelector((state) => state.user);      //구조분해.
     const { mainPosts } = useSelector((state) => state.post);
 
     return (
         <AppLayout>
-            {isLoggedIn && <PostForm />}
+            {me && <PostForm />}
             {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
         </AppLayout>
     );
