@@ -9,6 +9,8 @@ import { createGlobalStyle } from 'styled-components';
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
 
+//fixed git config
+
 const SearchInput = styled(Input.Search)`
     vertical-align: middle;
 `
