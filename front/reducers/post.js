@@ -37,37 +37,45 @@ export const initialState = {
         }]
     }],
     imagePaths: [],
-    addPostAdded: false,
+    hasMorePost: true,
+    loadPostsLoading: false,
+    loadPostsDone: false,
+    loadPostsError: null,
+    addPostLoading: false,
     addPostDone: false,
     addPostError: null,
-    removePostAdded: false,
+    removePostLoading: false,
     removePostDone: false,
     removePostError: null,
-    addCommentAdded: false,
+    addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
 }
 
-initialState.mainPosts = initialState.mainPosts.concat(
-    Array(10).fill().map(() => ({
+export const generateDummyPost = (number) => Array(number).fill().map(() => ({
+    id: shortId.generate(),
+    User: {
         id: shortId.generate(),
+        nickname: faker.name.findName()
+    },
+    content: faker.lorem.paragraph,
+    Images: [{
+        src: faker.image.image(),
+    }],
+    Comments: [{
         User: {
             id: shortId.generate(),
             nickname: faker.name.findName()
         },
-        content: faker.lorem.paragraph,
-        Images: [{
-            src: faker.image.imageUrl(),
-        }],
-        Comments: [{
-            User: {
-                id: shortId.generate(),
-                nickname: faker.name.findName()
-            },
-            content: faker.lorem.sentence(),
-        }],
-    })),
-);
+        content: faker.lorem.sentence(),
+    }],
+}));
+
+// initialState.mainPosts = initialState.mainPosts.concat(generateDummyPost(10));
+
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';    //오타방지 차원에서 변수로 빼주는게 좋다. 
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS'; 
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE'; 
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';    //오타방지 차원에서 변수로 빼주는게 좋다. 
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS'; 
@@ -115,6 +123,21 @@ const reducer = (state = initialState, action) => {
     //immer (produce) 를 사용하면 알아서 불변성을 지켜준다.
     return produce(state, (draft) => {
         switch (action.type) {
+            case LOAD_POSTS_REQUEST:
+                draft.loadPostsLoading = true;
+                draft.loadPostsDone = false;
+                draft.loadPostsError = null;
+                break;
+            case LOAD_POSTS_SUCCESS:
+                draft.loadPostsLoading = false;
+                draft.loadPostsDone = true;
+                draft.mainPosts = action.data.concat(draft.mainPosts);
+                draft.hasMorePost = draft.mainPosts.length < 50;
+                break;    
+            case LOAD_POSTS_FAILURE:
+                draft.loadPostsLoading = false;
+                draft.loadPostsError = action.error;
+                break;            
             case ADD_POST_REQUEST:
                 draft.addPostLoading = true;
                 draft.addPostDone = false;
