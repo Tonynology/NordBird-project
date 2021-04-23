@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const express = require('express-session');
+const session  = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dotenv = require('dotenv');
@@ -47,9 +47,6 @@ app.get('/', (req, res) => {
     res.send('hello express');
 });
 
-app.get('/api', (req, res) => {
-    res.send('hello api');
-});
 
 app.get('/api/posts', (req, res) => {
     res.json([
@@ -60,11 +57,15 @@ app.get('/api/posts', (req, res) => {
 });
 
 app.use(cors({
-    origin: '*',
-    credentials: false,
+    origin: 'http://localhost:3000',
+    credentials: true,
 }));
 app.use('/post', postRouter);
 app.use('/user', userRouter);
+
+// app.use((err, req, res, next) => {  //next(err) 는 에러처리 미들웨어로 보내버리는데, 그렇지않고 직접 만들고 싶다면 여기서 만든다.
+
+// });
 
 app.listen(3065, () => {
     console.log('server running');
