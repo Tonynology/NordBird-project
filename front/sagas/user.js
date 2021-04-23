@@ -16,7 +16,31 @@ import {
     SIGN_UP_FAILURE,
     SIGN_UP_REQUEST,
     SIGN_UP_SUCCESS,  
+    LOAD_MY_INFO_REQUEST,
+    LOAD_MY_INFO_SUCCESS,
+    LOAD_MY_INFO_FAILURE,
   } from '../reducers/user';
+
+
+function loadUserAPI(data) {
+    return axios.get('/user')
+}
+
+function* loadUser(action) {
+    try {
+        
+        const result = yield call(loadUserAPI, action.data);    //call을 쓰면 동기, fork를 쓰면 비동기. result값을 받고 진행해야 하므로 call을 사용.
+        yield put({
+            type: LOAD_MY_INFO_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        yield put({
+            type: LOAD_MY_INFO_FAILURE,
+            error: err.response.data
+        })
+    }    
+}
 
 function followAPI(data) {
     return axios.post('/api/login', data)
@@ -83,8 +107,9 @@ function logoutAPI() {
 
 function* logOut() {
     try {
-        yield delay(1000);
+        // yield delay(1000);
         // const result = yield call(logoutAPI);    //call을 쓰면 동기, fork를 쓰면 비동기. result값을 받고 진행해야 하므로 call을 사용.
+        yield call(logoutAPI);
         yield put({
             type: LOG_OUT_SUCCESS,
         });
@@ -113,6 +138,9 @@ function* signUp(action) {
         })
     }    
 }
+function* watchLoadUser() {
+    yield takeLatest(LOAD_MY_INFO_REQUEST, loadUser);
+}
 
 function* watchFollow() {
     yield takeLatest(FOLLOW_REQUEST, follow);
@@ -136,6 +164,7 @@ function* watchSignUp() {
 
 export default function* userSaga() {
     yield all([
+        fork(watchLoadUser),
         fork(watchFollow),
         fork(watchUnfollow),
         fork(watchLogin),
