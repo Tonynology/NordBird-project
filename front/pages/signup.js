@@ -41,9 +41,9 @@ const Signup = () => {
 
     const [passwordCheck, setPasswordCheck] = useState('');
     const [passwordError, setPasswordError] = useState(false);
-    const onChangePasswordCheck = useCallback(() => {
+    const onChangePasswordCheck = useCallback((e) => {
         setPasswordCheck(e.target.value);
-        setPasswordError(e.target.value === password);
+        setPasswordError(e.target.value !== password);
     }, [password]);
     
     const [term, setTerm] = useState('');
@@ -62,7 +62,7 @@ const Signup = () => {
         }
         console.log(email, nickname, password);
         dispatch({
-            tpe: SIGN_UP_REQUEST,
+            type: SIGN_UP_REQUEST,
             data: { email, password, nickname },
         })
     }, [email, password, passwordCheck, term]);

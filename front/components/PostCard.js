@@ -7,16 +7,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import { REMOVE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
 import FollowButton from './FollowButton';
 
 const PostCard = ({ post }) => {
     const dispatch = useDispatch();
     const { removePostLoading } = useSelector((state) => state.post);
-    const [liked, setLiked] = useState(false);
+    // const [liked, setLiked] = useState(false);
     const [commetnFormOpened, setCommentFormOpened] = useState(false);
-    const onToggleLike = useCallback(() => {    //false->true / true->false 로 왔다갔다 바꿔주는 코드
-        setLiked((prev) => !prev);
+
+    const onLike = useCallback(() => {    //false->true / true->false 로 왔다갔다 바꿔주는 코드
+        dispatch({
+            type: LIKE_POST_REQUEST,
+            data: post.id,
+        });
+    }, []);
+    const onUnLike = useCallback(() => {    //false->true / true->false 로 왔다갔다 바꿔주는 코드
+        dispatch({
+            type: UNLIKE_POST_REQUEST,
+            data: post.id,
+        });
     }, []);
     const onToggleComment = useCallback(() => {
         setCommentFormOpened((prev) => !prev);
@@ -31,6 +41,7 @@ const PostCard = ({ post }) => {
 
     const { me } = useSelector((state) => state.user);
     const id = me?.id;
+    const liked = post.Likers.find((v) => v.id === id);
     // const id = me && me.id;
     return (
         <div style={{ marginBottom: 20 }}>
@@ -39,8 +50,8 @@ const PostCard = ({ post }) => {
                 actions={[      //배열 안에 jsx를 넣을 땐 key값을 함께 넣어줘야함.
                     <RetweetOutlined key="retweet"/>,
                     liked
-                        ? <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={onToggleLike}/>
-                        : <HeartOutlined key="heart" onClick={onToggleLike}/>,
+                        ? <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={onUnLike}/>
+                        : <HeartOutlined key="heart" onClick={onLike}/>,
                     <MessageOutlined key="comment" onClick={onToggleComment}/>,
                     <Popover key="more" content={(
                         <Button.Group>
@@ -95,9 +106,10 @@ PostCard.prpTypes = {   //.object 대신 .shape은 object 안에 있는 모든�
         id: PropTypes.number,
         User: PropTypes.object,
         content: PropTypes.string,
-        createdAt: PropTypes.object,
+        createdAt: PropTypes.string,
         Comments: PropTypes.arrayOf(PropTypes.object),
         Images: PropTypes.arrayOf(PropTypes.object),
+        Likers: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,   
 };
 
