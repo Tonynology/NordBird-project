@@ -57,6 +57,9 @@ export const initialState = {
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+    uploadImagesLoading: false,
+    uploadImagesDone: false,
+    uploadImagesError: null,
 }
 
 // export const generateDummyPost = (number) => Array(number).fill().map(() => ({
@@ -79,6 +82,10 @@ export const initialState = {
 // }));
 
 // initialState.mainPosts = initialState.mainPosts.concat(generateDummyPost(10));
+
+export const UPLOAD_IMAGE_REQUEST = 'UPLOAD_IMAGE_REQUEST';     
+export const UPLOAD_IMAGE_SUCCESS = 'UPLOAD_IMAGE_SUCCESS'; 
+export const UPLOAD_IMAGE_FAILURE = 'UPLOAD_IMAGE_FAILURE'; 
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';    //오타방지 차원에서 변수로 빼주는게 좋다. 
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS'; 
@@ -103,6 +110,8 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';    
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS'; 
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE'; 
+
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
@@ -138,7 +147,25 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
     //immer (produce) 를 사용하면 알아서 불변성을 지켜준다.
     return produce(state, (draft) => {
-        switch (action.type) {
+        switch (action.type) { 
+            case REMOVE_IMAGE:  //이건 동기 함수, 나머진 비동기
+                draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
+                break;
+            case UPLOAD_IMAGE_REQUEST:
+                draft.uploadImagesLoading = true;
+                draft.uploadImagesDone = false;
+                draft.uploadImagesError = null;
+                break;
+            case UPLOAD_IMAGE_SUCCESS:{
+                draft.imagePaths = action.data;
+                draft.uploadImagesLoading = false;
+                draft.uploadImagesDone = true;                
+                break;    
+            }
+            case UPLOAD_IMAGE_FAILURE:
+                draft.uploadImagesLoading = false;
+                draft.uploadImagesError = action.error;
+                break;            
             case LIKE_POST_REQUEST:
                 draft.likePostLoading = true;
                 draft.likePostDone = false;
@@ -201,6 +228,7 @@ const reducer = (state = initialState, action) => {
                 draft.addPostLoading = false;
                 draft.addPostDone = true;
                 draft.mainPosts.unshift(action.data);
+                draft.imagePaths = [];
                 break;
                 // return {
                 //     ...state,

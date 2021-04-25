@@ -21,12 +21,36 @@ import {
     REMOVE_POST_FAILURE,
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
+    UPLOAD_IMAGES_REQUEST,
+    UPLOAD_IMAGES_SUCCESS,
+    UPLOAD_IMAGES_FAILURE,
   } from '../reducers/post';
   import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
+function uploadImagesAPI(data) {
+    return axios.post('/post/images', data );
+}
+
+function* uploadImages(action) {
+    try {
+        // yield delay(1000);
+        const result = yield call(uploadImagesAPI, action.data);    //call을 쓰면 동기, fork를 쓰면 비동기. result값을 받고 진행해야 하므로 call을 사용.
+        // const id = shortId.generate();
+        yield put({
+            type: UPLOAD_IMAGES_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: UPLOAD_IMAGES_FAILURE,
+            data: err.response.data
+        });
+    }    
+}
 
 function addPostAPI(data) {
-    return axios.post('/api/post', { content: data });
+    return axios.post('/post', data);   //formdata는 바로 data로 보내줘야함. 객체로 하면 안됨
 }
 
 function* addPost(action) {
@@ -157,6 +181,10 @@ function* addComment(action) {
     }    
 }
 
+function* watchUploadImages() {
+    yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
+
 function* watchLikePost() {
     yield takeLatest(LIKE_POST_REQUEST, likePost);
 }
@@ -183,6 +211,7 @@ function* watchAddComment() {
 
 export default function* postSaga() {
     yield all([
+        fork(watchUploadImages),
         fork(watchLikePost),
         fork(watchUnlikePost),
         fork(watchAddPost),

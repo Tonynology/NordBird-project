@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path');
 
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
@@ -28,8 +29,9 @@ app.use(morgan('dev'));
 //     origin: '*',
 // }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use('/', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json());    //axios 보낼때
+app.use(express.urlencoded({ extended: true }));    //읿반 form을 보낼때 (image가있는 form은 아님)
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
     saveUninitialized: false,

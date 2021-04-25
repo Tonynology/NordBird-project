@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useEffect  } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPost } from '../reducers/post';
+import { UPLOAD_IMAGE_REQUEST, REMOVE_IMAGE, ADD_POST_REQUEST } from '../reducers/post';
 import useInput from '../hooks/useInput';
 
 
@@ -21,13 +21,43 @@ const PostForm = () => {
     // }, []);
 
     const onSubmit = useCallback(() => {
-        dispatch(addPost(text));
-    }, [text]);
+        if (!text || !text.trim()) {
+            return alert('please write the form');
+        }
+        const formData = new FormData();
+        imagePaths.forEach((p) => {
+            formData.append('image', p);
+        });
+        formData.append('content', text);
+        return dispatch({
+            type: ADD_POST_REQUEST,
+            data: formData,
+        });
+    }, [text, imagePaths]);
 
     const imageInput = useRef();
     const onClickImageUpload = useCallback(() => {
         imageInput.current.click();
     }, [imageInput.current]);
+
+    const onChangeImages = useCallback((e) => {
+        console.log('images', e.target.files);
+        const imageFormData = new FormData(); //FormData() 형식으로 보내준다 그리고 multer가 처리
+        [].forEach.call(e.target.files, (f) => {
+            imageFormData.append('image', f);
+        });
+        dispatch({
+            type: UPLOAD_IMAGE_REQUEST,
+            data: imageFormData,
+        })
+    }, []);
+
+    const onRemoveImage = useCallback((index) => () => {
+        dispatch({
+            type: REMOVE_IMAGE,
+            data: index,
+        });
+    });
 
     return (
         <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
@@ -38,16 +68,16 @@ const PostForm = () => {
                 placeholder={'what happened?'}
             />
             <div>
-                <input type="file" multiple hidden ref={imageInput} />
+                <input type="file" name="image" multiple hidden ref={imageInput} onChange={onChangeImages} />
                 <Button onClick={onClickImageUpload}>Image upload</Button>
                 <Button type="primary" style={{ float: 'right' }} htmlType="submit">Twit!</Button>
             </div>
             <div>
-                {imagePaths.map((v) => (
+                {imagePaths.map((v, i) => ( //map안에 콜백함수에 데이터를 넣고싶으면 고차함수를 사용.
                     <div key={v} style={{ display: 'inline-block' }}>
-                        <img src={v} style={{ width: '200px' }} alt={v} />
+                        <img src={`http://localhost:3065/${v}`} style={{ width: '200px' }} alt={v} />
                         <div>
-                            <Button>Delete</Button>
+                            <Button onClick={onRemoveImage(i)}>Delete</Button>
                         </div>
                     </div>
                 ))}
