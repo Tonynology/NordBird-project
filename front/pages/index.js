@@ -12,7 +12,13 @@ import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 const Home = () => {
     const dispatch = useDispatch();    
     const { me } = useSelector((state) => state.user);      //구조분해.
-    const { mainPosts, hasMorePost, loadPostsLoading } = useSelector((state) => state.post);
+    const { mainPosts, hasMorePost, loadPostsLoading, retweetError } = useSelector((state) => state.post);
+
+    useEffect(() => {
+        if (retweetError) {
+            alert(retweetError);
+        }
+    }, [retweetError]);
 
     useEffect(() => {
         dispatch({
@@ -28,8 +34,10 @@ const Home = () => {
             console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
             if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
                 if (hasMorePost && !loadPostsLoading) {
+                    const lastId = mainPosts[mainPosts.length - 1]?.id;
                     dispatch({
                         type: LOAD_POSTS_REQUEST,
+                        lastId,
                     });
                 }                
             }
@@ -38,7 +46,7 @@ const Home = () => {
         return () => {
             window.removeEventListener('scroll', onScroll); //useEffect에서 window eventlister를 사용하면 remove를 해줘야한다. 안그러면 메모리에 쌓임.
         };
-    }, [hasMorePost, loadPostsLoading]);
+    }, [hasMorePost, loadPostsLoading, mainPosts]);
 
 
     return (

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button, Popover, Avatar, List, Comment } from 'antd';
 import { RetweetOutlined, HeartOutlined, MessageOutlined,  EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
@@ -10,37 +10,62 @@ import PostCardContent from './PostCardContent';
 import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
 import FollowButton from './FollowButton';
 
+
 const PostCard = ({ post }) => {
     const dispatch = useDispatch();
-    const { removePostLoading } = useSelector((state) => state.post);
+    const { removePostLoading, retweetError } = useSelector((state) => state.post);
     // const [liked, setLiked] = useState(false);
     const [commetnFormOpened, setCommentFormOpened] = useState(false);
+    
+    const { me } = useSelector((state) => state.user);
+    const id = me?.id;
+
 
     const onLike = useCallback(() => {    //false->true / true->false 로 왔다갔다 바꿔주는 코드
-        dispatch({
+        if (!id) {
+            return alert('login is necessary');
+        }
+        return dispatch({
             type: LIKE_POST_REQUEST,
             data: post.id,
         });
     }, []);
     const onUnLike = useCallback(() => {    //false->true / true->false 로 왔다갔다 바꿔주는 코드
-        dispatch({
+        if (!id) {
+            return alert('login is necessary');
+        }
+        return dispatch({
             type: UNLIKE_POST_REQUEST,
             data: post.id,
         });
     }, []);
     const onToggleComment = useCallback(() => {
+        if (!id) {
+            return alert('login is necessary');
+        }
         setCommentFormOpened((prev) => !prev);
     }, []);
 
     const onRemovePost = useCallback(() => {
-        dispatch({
+        if (!id) {
+            return alert('login is necessary');
+        }
+        return dispatch({
             type: REMOVE_POST_REQUEST,
             data: post.id,
         });
     }, []);
 
-    const { me } = useSelector((state) => state.user);
-    const id = me?.id;
+    const onRetweet = useCallback(() => {
+        if (!id) {
+            return alert('login is necessary');
+        }
+        return dispatch({
+            type: RETWEET_REQUEST,
+            data: post.id,
+        })
+    }, [id]);
+
     const liked = post.Likers.find((v) => v.id === id);
     // const id = me && me.id;
     return (
@@ -48,7 +73,7 @@ const PostCard = ({ post }) => {
             <Card
                 cover={post.Images[0] && <PostImages images={post.Images} />}
                 actions={[      //배열 안에 jsx를 넣을 땐 key값을 함께 넣어줘야함.
-                    <RetweetOutlined key="retweet"/>,
+                    <RetweetOutlined key="retweet" onClick={onRetweet} />,
                     liked
                         ? <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={onUnLike}/>
                         : <HeartOutlined key="heart" onClick={onLike}/>,
@@ -68,13 +93,27 @@ const PostCard = ({ post }) => {
                         <EllipsisOutlined key="retweet"/>
                     </Popover>
                 ]}
+                title={post.RetweetId ? `${post.User.nickname} retweeted.` : null}
                 extra={id && <FollowButton post={post} />}
             >
-                <Card.Meta
-                    avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-                    title={post.User.nickname}
-                    description={<PostCardContent postData={post.content} />}
-                />
+                {post.RetweetId && post.Retweet
+                ? (
+                    <Card
+                        cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
+                    >
+                        <Card.Meta
+                            avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
+                            title={post.Retweet.User.nickname}
+                            description={<PostCardContent postData={post.Retweet.content} />}
+                        />
+                    </Card>
+                )
+            : (<Card.Meta
+                avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                title={post.User.nickname}
+                description={<PostCardContent postData={post.content} />}
+            />)}
+                
             </Card>
             {commetnFormOpened && (
                 <div>
@@ -110,6 +149,8 @@ PostCard.prpTypes = {   //.object 대신 .shape은 object 안에 있는 모든�
         Comments: PropTypes.arrayOf(PropTypes.object),
         Images: PropTypes.arrayOf(PropTypes.object),
         Likers: PropTypes.arrayOf(PropTypes.object),
+        RetweetId: PropTypes.number,
+        Retweet: PropTypes.objectOf(PropTypes.any),
     }).isRequired,   
 };
 

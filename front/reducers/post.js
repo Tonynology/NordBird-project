@@ -60,6 +60,9 @@ export const initialState = {
     uploadImagesLoading: false,
     uploadImagesDone: false,
     uploadImagesError: null,
+    retweetLoading: false,
+    retweetDone: false,
+    retweetError: null,
 }
 
 // export const generateDummyPost = (number) => Array(number).fill().map(() => ({
@@ -111,6 +114,10 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS'; 
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE'; 
 
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';    
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS'; 
+export const RETWEET_FAILURE = 'RETWEET_FAILURE'; 
+
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 export const addPost = (data) => ({
@@ -148,6 +155,21 @@ const reducer = (state = initialState, action) => {
     //immer (produce) 를 사용하면 알아서 불변성을 지켜준다.
     return produce(state, (draft) => {
         switch (action.type) { 
+            case RETWEET_REQUEST:
+                draft.retweetLoading = true;
+                draft.retweetDone = false;
+                draft.retweetError = null;
+                break;
+            case RETWEET_SUCCESS:{
+                draft.retweetLoading = false;
+                draft.retweetDone = true;   
+                draft.mainPosts.unshift(actino.data);             
+                break;    
+            }
+            case RETWEET_FAILURE:
+                draft.retweetLoading = false;
+                draft.retweetError = action.error;
+                break;            
             case REMOVE_IMAGE:  //이건 동기 함수, 나머진 비동기
                 draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
                 break;
@@ -206,7 +228,7 @@ const reducer = (state = initialState, action) => {
             case LOAD_POSTS_SUCCESS:
                 draft.loadPostsLoading = false;
                 draft.loadPostsDone = true;
-                draft.mainPosts = action.data.concat(draft.mainPosts);
+                draft.mainPosts = action.mainPosts.concat(action.data);
                 draft.hasMorePost = draft.data.length === 10;
                 break;    
             case LOAD_POSTS_FAILURE:
