@@ -2,12 +2,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 import styled from 'styled-components';
+import axios from 'axios';
+import { END } from 'redux-saga';
 
 import AppLayout from "../components/AppLayout";
 import useInput from '../hooks/useInput';
 import { SIGN_UP_REQUEST } from '../reducers/user';
 import { useSelector, useDispatch } from 'react-redux';
 import Router from 'next/router';
+import wrapper from '../store/configureStore';
 
 const ErrorMessage = styled.div`
     color: red;
@@ -111,5 +114,21 @@ const Signup = () => {
         </AppLayout>
     );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context ) => {
+    console.log('getServerSideProps start');
+    const cookie = context.req ? context.req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';       
+    //서버에서 쿠키가 공유가 되기때문에 로그인이 공유되는 문제가 발생하기때문에 이런식으로 쿠키를 지웠다가 채운다.
+    if (context.req && cookie) {
+        axios.defaults.headers.Cookie = cookie;        
+    }
+    context.store.dispatch({
+        type: LOAD_MY_INFO_REQUEST,
+    });
+    context.store.dispatch(END);
+    console.log('getServerSideProps end');
+    await context.store.sagaTask.toPromise();
+});
 
 export default Signup;

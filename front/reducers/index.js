@@ -1,22 +1,24 @@
 import { HYDRATE } from 'next-redux-wrapper';
-import { combineReducers } from 'redux';
+import { combineReducers, combineReducers } from 'redux';
 
 import user from './user';
 import post from './post';
 
-const rootReducer = combineReducers ({
+
+const rootReducer = (state, action) =>  {
     //reducer를 ssr하기위해 HYDRATE를 사용해야하는데 HYDRATE를 위해서 index를 추가 한 것이다.
-    index: (state = {}, action) => {
-        switch(action.type) {
-            case HYDRATE:
-                return { ...state, ...action.payload };
-            
-            default:
-                return state;
+    switch (action.type) {
+        case HYDRATE:
+            console.log('HYDRATE', action);
+            return action.payload;
+        default: {
+            const combineReducers = combineReducers({
+                user,
+                post,
+            });
+            return combineReducers(state, action);
         }
-    },
-    user,
-    post,
-});
+    }
+};
 
 export default rootReducer;

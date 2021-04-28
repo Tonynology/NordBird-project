@@ -122,6 +122,56 @@ router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next)
     res.json(req.files.map((v) => v.filename));
 });
 
+router.get('/:postId', async (req, res, next) => {  //GET /post/1
+    try {
+        const post = await Post.findOne({
+            where: { id: req.params.postId },
+        });
+        if (!post) {
+            return res.status(404).send('post is not exist');
+        }
+        if (req.user.id === post.UserId || (post.Retweet && post.Retweet.UserId === req.user.id)) {
+            return res.status(403).send("You can't retweet your post!");
+        }
+        const fullPost = await Post.findOne({
+            where: { id: post.id },
+            include: [{
+                model: Post,
+                as: 'Retweet',
+                include: [{
+                    model: User,
+                    attributes: ['id', 'nickname'],
+                }, {
+                    model: Image,
+                }]
+            }, {
+                model: User,
+                attributes: ['id', 'nickname'],
+            }, {
+                model: User,
+                as: 'Likers',
+                attributes: ['id', 'nickname'],
+            }, {
+                model: Image,
+            }, {
+                model: Comment,
+                include: [{
+                    model: User,
+                    attributes: ['id', 'nickname'],
+                }]
+            }, {
+                model: User,
+                as: 'Likers',
+                attributes: ['id'],
+            }]
+        })
+        res.status(200).json(fullPost);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }    
+});
+
 router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {  //POST /post/1/comment
     try {
         const post = await Post.findOne({
