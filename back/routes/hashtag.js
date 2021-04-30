@@ -1,11 +1,9 @@
 const express = require('express');
+const { Hashtag, Post, Image, Comment, User } = require('../models');
+const router = express.Router();
 const { Op } = require('sequelize');
 
-const { Post, Image, User, Comment } = require('../models');
-
-const router = express.Router();
-
-router.get('/', async (req, res, next) => {   // GET /posts   포스트 여러개 가져옴
+router.get('/:hashtag', async (req, res, next) => {   // GET /hashtag/노드
     try {
         const where = {};
         if (parserInt(req.query.lastId, 10)) {  //초기 로딩이 아닐때
@@ -22,6 +20,9 @@ router.get('/', async (req, res, next) => {   // GET /posts   포스트 여러�
             ],  // offset과 limit이 꼬여버린다. 그래서 offset대신 lastId를 사용.
             
             include: [{
+                model: Hashtag,
+                where: { name: decodeURIComponent(req.params.hashtag) },
+            }, {
                 model: User,
                 attributes: ['id', 'nickname'],
             }, {
