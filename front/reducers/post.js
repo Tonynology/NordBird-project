@@ -90,9 +90,9 @@ export const initialState = {
 
 // initialState.mainPosts = initialState.mainPosts.concat(generateDummyPost(10));
 
-export const UPLOAD_IMAGE_REQUEST = 'UPLOAD_IMAGE_REQUEST';     
-export const UPLOAD_IMAGE_SUCCESS = 'UPLOAD_IMAGE_SUCCESS'; 
-export const UPLOAD_IMAGE_FAILURE = 'UPLOAD_IMAGE_FAILURE'; 
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';     
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS'; 
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE'; 
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';    //오타방지 차원에서 변수로 빼주는게 좋다. 
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS'; 
@@ -189,18 +189,18 @@ const reducer = (state = initialState, action) => {
             case REMOVE_IMAGE:  //이건 동기 함수, 나머진 비동기
                 draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
                 break;
-            case UPLOAD_IMAGE_REQUEST:
+            case UPLOAD_IMAGES_REQUEST:
                 draft.uploadImagesLoading = true;
                 draft.uploadImagesDone = false;
                 draft.uploadImagesError = null;
                 break;
-            case UPLOAD_IMAGE_SUCCESS:{
+            case UPLOAD_IMAGES_SUCCESS:{
                 draft.imagePaths = action.data;
                 draft.uploadImagesLoading = false;
                 draft.uploadImagesDone = true;                
                 break;    
             }
-            case UPLOAD_IMAGE_FAILURE:
+            case UPLOAD_IMAGES_FAILURE:
                 draft.uploadImagesLoading = false;
                 draft.uploadImagesError = action.error;
                 break;            

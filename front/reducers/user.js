@@ -69,9 +69,9 @@ export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 
-export const LOAD_FOLLOWINGS_REQUEST = 'FOLLOW_REQUEST';
-export const LOAD_FOLLOWINGS_SUCCESS = 'FOLLOW_SUCCESS';
-export const LOAD_FOLLOWINGS_FAILURE = 'FOLLOW_FAILURE';
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
 
 export const LOAD_FOLLOWERS_REQUEST = 'UNFOLLOW_REQUEST';
 export const LOAD_FOLLOWERS_SUCCESS = 'UNFOLLOW_SUCCESS';
@@ -108,7 +108,7 @@ const reducer = (state = initialState, action) => {
                 break;
             case REMOVE_FOLLOWER_SUCCESS:
                 draft.removeFollowerLoading = false;
-                draft.me.Followings = draft.me.Followers.filter((v) => v.id !== action.data.UserId);
+                draft.me.Followers = draft.me.Followers.filter((v) => v.id !== action.data.UserId);
                 draft.removeFollowerDone = true;
                 break;
             case REMOVE_FOLLOWER_FAILURE:
@@ -136,7 +136,7 @@ const reducer = (state = initialState, action) => {
                 break;
             case LOAD_FOLLOWERS_SUCCESS:
                 draft.loadFollowersLoading = false;
-                draft.me.Follwers = action.data;
+                draft.me.Followers = action.data;
                 draft.loadFollowersDone = true;
                 break;
             case LOAD_FOLLOWERS_FAILURE:

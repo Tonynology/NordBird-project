@@ -25,6 +25,12 @@ import {
     REMOVE_FOLLOWER_REQUEST,
     REMOVE_FOLLOWER_SUCCESS,
     REMOVE_FOLLOWER_FAILURE,
+    LOAD_FOLLOWERS_REQUEST,
+    LOAD_FOLLOWERS_SUCCESS,
+    LOAD_FOLLOWERS_FAILURE,
+    LOAD_FOLLOWINGS_REQUEST,
+    LOAD_FOLLOWINGS_SUCCESS,
+    LOAD_FOLLOWINGS_FAILURE,
   } from '../reducers/user';
   
 function removeFollowerAPI(data) {
@@ -153,7 +159,7 @@ function* follow(action) {
 }
 
 function unfollowAPI(data) {
-    return axios.delete(`/user/${data}`)
+    return axios.delete(`/user/${data}/follow`)
 }
 
 function* unfollow(action) {

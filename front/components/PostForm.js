@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useEffect  } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { UPLOAD_IMAGE_REQUEST, REMOVE_IMAGE, ADD_POST_REQUEST } from '../reducers/post';
+import { UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE, ADD_POST_REQUEST } from '../reducers/post';
 import useInput from '../hooks/useInput';
 
 
@@ -29,6 +29,10 @@ const PostForm = () => {
             formData.append('image', p);
         });
         formData.append('content', text);
+        
+        for (const value of formData) {
+            console.log(value);
+        }
         return dispatch({
             type: ADD_POST_REQUEST,
             data: formData,
@@ -46,10 +50,15 @@ const PostForm = () => {
         [].forEach.call(e.target.files, (f) => {
             imageFormData.append('image', f);
         });
+
+        for (const value of imageFormData) {
+            console.log(value);
+        }
+
         dispatch({
-            type: UPLOAD_IMAGE_REQUEST,
+            type: UPLOAD_IMAGES_REQUEST,
             data: imageFormData,
-        })
+        });
     }, []);
 
     const onRemoveImage = useCallback((index) => () => {

@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {   // GET /posts   포스트 여러개 가져옴
     try {
         const where = {};
-        if (parserInt(req.query.lastId, 10)) {  //초기 로딩이 아닐때
+        if (parseInt(req.query.lastId, 10)) {  //초기 로딩이 아닐때
             where.id = { [Op.lt]: parseInt(req.query.lastId, 10)}
         }
         const posts = await Post.findAll({
