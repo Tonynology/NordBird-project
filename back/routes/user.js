@@ -39,6 +39,73 @@ router.get('/', async (req, res, next) => {   //GET /user
     }    
 });
 
+router.get('/followers', isLoggedIn, async (req, res, next) => {   //get /user/followers
+    try {
+        const user = await User.findOne({ where: { id: req.user.id }});
+        if (!user) {
+            res.status(403).send('The user is not exist.');
+        }
+        const followers = await user.getFollowers({
+            limit: parseInt(req.query.limit),
+        });        
+        res.status(200).json(followers);        
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.get('/following', isLoggedIn, async (req, res, next) => {   //get /user/following
+    try {
+        const user = await User.findOne({ where: { id: req.user.id }});
+        if (!user) {
+            res.status(403).send('The user is not exist.');
+        }
+        const followings = await user.getFollowings({
+            limit: parseInt(req.query.limit),
+        });        
+        res.status(200).json(followings);        
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.get('/:userId', async (req, res, next) => { // GET /user/3
+    try {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.params.id },
+        attributes: {
+          exclude: ['password']
+        },
+        include: [{
+          model: Post,
+          attributes: ['id'],
+        }, {
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        }, {
+          model: User,
+          as: 'Followers',
+          attributes: ['id'],
+        }]
+      })
+      if (fullUserWithoutPassword) {
+        const data = fullUserWithoutPassword.toJSON();
+        data.Posts = data.Posts.length;
+        data.Followings = data.Followings.length;
+        data.Followers = data.Followers.length;
+        res.status(200).json(data);
+      } else {
+        res.status(404).json('User is not exist.');
+      }
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  });
+
 router.get('/:userId/posts', async (req, res, next) => {   // GET /user/1/posts
     try {
         const where = { UserId: req.params.userId };
@@ -212,32 +279,6 @@ router.delete('/follow/:userId', isLoggedIn, async (req, res, next) => {   //DEL
     }
 });
 
-router.get('/followers', isLoggedIn, async (req, res, next) => {   //get /user/followers
-    try {
-        const user = await User.findOne({ where: { id: req.user.id }});
-        if (!user) {
-            res.status(403).send('The user is not exist.');
-        }
-        const followers = await user.getFollowers();        
-        res.status(200).json(followers);        
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
 
-router.get('/following', isLoggedIn, async (req, res, next) => {   //get /user/following
-    try {
-        const user = await User.findOne({ where: { id: req.user.id }});
-        if (!user) {
-            res.status(403).send('The user is not exist.');
-        }
-        await user.getFollowings();        
-        res.status(200).json(getFollowings);        
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
 
 module.exports = router;
