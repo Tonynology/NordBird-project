@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropType from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
+import Router from 'next/router';
 
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
+import useInput from '../hooks/useInput';
 
 //fixed git config
 
@@ -34,8 +36,14 @@ const AppLayout = ({children}) => {
     // const [isLoggedIn, setIsLoggedIn] = useState(false); ///dummy data for login without server
     // redux/reducers 의 중앙관리 덕에 더이상 필요하지 않음.
 
+    const [searchInput, onChangeSearchInput] = useInput('');
     const { me } = useSelector((state) => state.user);      //useSelector는 npm i react-redux 필요
     //  == const { isLoggedIn } = useSelector((state) => state.user);  구조분해 할당.
+
+    const onSearch = useCallback(() => {
+        Router.push(`/hashtag/${searchInput}`);
+    }, [searchInput]);
+
     return (
         <div>
             <Global />
@@ -50,7 +58,12 @@ const AppLayout = ({children}) => {
                     <Link href="/signup"><a>Signup</a></Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <SearchInput enterButton />
+                    <SearchInput 
+                     enterButton 
+                     value={searchInput}
+                     onChange={onChangeSearchInput}
+                     onSearch={onSearch}
+                    />
                 </Menu.Item>
             </Menu>
             <Row gutter={8}>
