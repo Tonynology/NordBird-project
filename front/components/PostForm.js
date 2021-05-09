@@ -3,6 +3,7 @@ import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE, ADD_POST_REQUEST } from '../reducers/post';
 import useInput from '../hooks/useInput';
+import { backUrl } from '../config/config';
 
 
 const PostForm = () => {
@@ -84,7 +85,7 @@ const PostForm = () => {
             <div>
                 {imagePaths.map((v, i) => ( //map안에 콜백함수에 데이터를 넣고싶으면 고차함수를 사용.
                     <div key={v} style={{ display: 'inline-block' }}>
-                        <img src={`http://localhost:3065/${v}`} style={{ width: '200px' }} alt={v} />
+                        <img src={`${backUrl}/${v}`} style={{ width: '200px' }} alt={v} />
                         <div>
                             <Button onClick={onRemoveImage(i)}>Delete</Button>
                         </div>
