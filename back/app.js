@@ -6,6 +6,8 @@ const passport = require('passport');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
@@ -24,12 +26,21 @@ db.sequelize.sync()
 
 passportConfig();
 
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'production') {
+    app.use(morgan('combined'));
+    app.use(hpp());
+    app.use(helmet());
+} else {
+    app.use(morgan('dev'));
+}
 
 // app.use(cors({
 //     origin: '*',
 // }));
-
+app.use(cors({
+    origin: ['http://localhost:3000', 'nodebird.com'],
+    credentials: true,
+}));
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());    //axios 보낼때
 app.use(express.urlencoded({ extended: true }));    //읿반 form을 보낼때 (image가있는 form은 아님)
@@ -63,10 +74,7 @@ app.get('/', (req, res) => {
 //     ]);
 // });
 
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-}));
+
 app.use('/posts', postsRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
