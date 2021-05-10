@@ -32,7 +32,7 @@ const Hashtag = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [mainPosts.length, hasMorePosts, tag]);
+  }, [mainPosts.length, hasMorePosts, tag, loadPostsLoading]);
 
   return (
     <AppLayout>

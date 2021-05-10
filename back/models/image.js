@@ -19,6 +19,6 @@ module.exports = class Image extends Model {//MySQL에는 image 테이블 생성
     }
 
     static associate(db) {
-        db.Post.belongsTo(db.Post);
+        db.Image.belongsTo(db.Post);
     }
 };
