@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { all, takeLatest, delay, fork, put, throttle, call } from "@redux-saga/core/effects";
-import shortId from 'shortid';
+import { all, takeLatest, fork, put, throttle, call } from "@redux-saga/core/effects";
+
 import {
     ADD_COMMENT_FAILURE,
     ADD_COMMENT_REQUEST,
@@ -161,10 +161,10 @@ function* loadPosts(action) {
             data: result.data,
         });
     } catch (err) {
-        console.error(err);
+        console.dir(err);
         yield put({
             type: LOAD_POSTS_FAILURE,
-            error: err.response.data
+            error: err.name,
         })
     }    
 }

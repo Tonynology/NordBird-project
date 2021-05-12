@@ -248,8 +248,8 @@ const reducer = (state = initialState, action) => {
             case LOAD_POSTS_SUCCESS:
                 draft.loadPostsLoading = false;
                 draft.loadPostsDone = true;
-                draft.mainPosts = action.mainPosts.concat(action.data);
-                draft.hasMorePost = draft.data.length === 10;
+                draft.mainPosts = draft.mainPosts.concat(action.data);
+                draft.hasMorePosts = action.data.length === 10;
                 break;    
             case LOAD_USER_POSTS_FAILURE:
             case LOAD_HASHTAG_POSTS_FAILURE:
@@ -258,10 +258,10 @@ const reducer = (state = initialState, action) => {
                 draft.loadPostsError = action.error;
                 break;            
             case LOAD_POST_REQUEST:
-            draft.loadPostLoading = true;
-            draft.loadPostDone = false;
-            draft.loadPostError = null;
-            break;
+                draft.loadPostLoading = true;
+                draft.loadPostDone = false;
+                draft.loadPostError = null;
+                break;
             case LOAD_POST_SUCCESS:
                 draft.loadPostLoading = false;
                 draft.loadPostDone = true;
