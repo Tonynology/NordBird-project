@@ -6,8 +6,8 @@ module.exports = class Comment extends Model {
         return super.init({
             // id: {}, mysql에서 자동으로 넣어줌.
             content: {
-            type: DataTypes.TEXT,
-            allowNull: false,
+                type: DataTypes.TEXT,
+                allowNull: false,
             },
         }, {
             modelName: 'Comment',
