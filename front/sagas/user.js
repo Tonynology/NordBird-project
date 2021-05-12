@@ -135,7 +135,7 @@ function* loadMyInfo() {
         console.dir(err);
         yield put({
             type: LOAD_MY_INFO_FAILURE,
-            error: err.name,
+            error: err.response.data,
         })
     }    
 }

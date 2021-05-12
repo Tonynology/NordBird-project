@@ -164,7 +164,7 @@ function* loadPosts(action) {
         console.dir(err);
         yield put({
             type: LOAD_POSTS_FAILURE,
-            error: err.name,
+            error: err.response.data,
         })
     }    
 }
