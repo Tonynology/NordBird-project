@@ -1,15 +1,15 @@
 exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
-        next();
+      next();
     } else {
-        res.stateu(401).send('login is necessary');
+      res.status(401).send('로그인이 필요합니다.');
     }
-};
-
-exports.isNotLoggedIn = (req, res, next) => {
+  };
+  
+  exports.isNotLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        next(); //인자가 없으면 다음 미들웨어로 간다. 하지만 인자가 있느면 에러처리로 간다.
+      next();
     } else {
-        res.stateu(401).send('login is not necessary');
+      res.status(401).send('로그인하지 않은 사용자만 접근 가능합니다.');
     }
-};
+  };

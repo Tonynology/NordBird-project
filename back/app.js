@@ -41,7 +41,7 @@ app.use(cors({
     origin: ['http://localhost:3000', 'nodebird.com', 'http://34.210.18.250'],
     credentials: true,
 }));
-app.use('/', express.static(path.join(__dirname, 'uploads')));
+// app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());    //axios 보낼때
 app.use(express.urlencoded({ extended: true }));    //읿반 form을 보낼때 (image가있는 form은 아님)
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -87,6 +87,6 @@ app.use('/hashtag', hashtagRouter);
 // app.listen(3065, () => {
 //     console.log('server running');
 // });
-app.listen(80, () => {
+app.listen(3065, () => {
     console.log('server running');
 });
