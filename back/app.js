@@ -30,6 +30,10 @@ if (process.env.NODE_ENV === 'production') {
     app.use(morgan('combined'));
     app.use(hpp());
     app.use(helmet());
+    app.use(cors({
+        origin: 'http://purplebird.com',
+        credentials: true,
+    }));
 } else {
     app.use(morgan('dev'));
 }
@@ -38,7 +42,7 @@ if (process.env.NODE_ENV === 'production') {
 //     origin: '*',
 // }));
 app.use(cors({
-    origin: ['http://localhost:3000', 'nodebird.com', 'http://34.210.18.250'],
+    origin: true,
     credentials: true,
 }));
 // app.use('/', express.static(path.join(__dirname, 'uploads')));
@@ -49,6 +53,11 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+        domain: process.env.NODE_ENV === 'production' && '.nodebird.com'
+    }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
