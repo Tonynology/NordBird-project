@@ -17,10 +17,25 @@ try{
     fs.mkdirSync('uploads');
 }
 
+AWS.config.update({
+   accessKeyId: process.env.S3_ACCESS_KEY_ID,
+   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+   region: 'us-west-2', 
+});
+
 //postForm에서 이미지는 encType="multipart/form-data" 형식으로 가는데 서버에서는 (app.js) 그냥form만 받고있으니 multer를 사용.
 //app.js에다가 하면 모든 라우터에 공통 적용 되기 때문에, multer는 라우더마다 별도의 세팅을 한다. 
 const upload = multer({
-    storage: multer.diskStorage({
+    storage: 
+    // multerS3({
+    //     s3: new AWS.S3(),
+    //     bucket: '...',
+    //     key(req, file, cb) {
+    //         cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
+    //     }
+    // }),
+    
+    multer.diskStorage({
         destination(req, file, done) {
             done(null, 'uploads');
         },
