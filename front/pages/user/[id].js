@@ -43,11 +43,11 @@ const User = () => {
         <Head>
           <title>
             {userInfo.nickname}
-            님의 글
+            's post
           </title>
-          <meta name="description" content={`${userInfo.nickname}님의 게시글`} />
-          <meta property="og:title" content={`${userInfo.nickname}님의 게시글`} />
-          <meta property="og:description" content={`${userInfo.nickname}님의 게시글`} />
+          <meta name="description" content={`${userInfo.nickname}'s post`} />
+          <meta property="og:title" content={`${userInfo.nickname}'s post`} />
+          <meta property="og:description" content={`${userInfo.nickname}'s post`} />
           <meta property="og:image" content="https://nodebird.com/favicon.ico" />
           <meta property="og:url" content={`https://nodebird.com/user/${id}`} />
         </Head>
@@ -57,17 +57,17 @@ const User = () => {
           <Card
             actions={[
               <div key="twit">
-                짹짹
+                TweetTweet
                 <br />
                 {userInfo.Posts}
               </div>,
               <div key="following">
-                팔로잉
+                Following
                 <br />
                 {userInfo.Followings}
               </div>,
               <div key="follower">
-                팔로워
+                Follower
                 <br />
                 {userInfo.Followers}
               </div>,
