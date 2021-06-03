@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(hpp());
     app.use(helmet());
     app.use(cors({
-        origin: 'http://purplebird.com',
+        origin: 'http://blueboard.online',
         credentials: true,
     }));
 } else {
@@ -56,7 +56,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         secure: false,
-        domain: process.env.NODE_ENV === 'production' && '.nodebird.com'
+        domain: process.env.NODE_ENV === 'production' && '.blueboard.online'
     }
 }));
 app.use(passport.initialize());
