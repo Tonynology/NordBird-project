@@ -36,15 +36,16 @@ if (process.env.NODE_ENV === 'production') {
     }));
 } else {
     app.use(morgan('dev'));
+    app.use(cors({
+        origin: true,
+        credentials: true,
+    }));
 }
 
 // app.use(cors({
 //     origin: '*',
 // }));
-app.use(cors({
-    origin: true,
-    credentials: true,
-}));
+
 // app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());    //axios 보낼때
 app.use(express.urlencoded({ extended: true }));    //읿반 form을 보낼때 (image가있는 form은 아님)
