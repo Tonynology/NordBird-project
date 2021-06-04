@@ -35,17 +35,17 @@ const upload = multer({
         }
     }),
     
-    multer.diskStorage({
-        destination(req, file, done) {
-            done(null, 'uploads');
-        },
-        //파일명 뒤에 업로드 시간을 붙여줘서 같은 이미지를 올렸을때 발생하는 문제를 방지
-        filename(req, file, done) { //tony.png            
-            const ext = path.extname(file.originalname);    //확장자 추출(.png)
-            const basename = path.basename(file.originalname, ext); //tony
-            done(null, basename + '_' + new Data().getTime() + ext); //tony1451235.png
-        }
-    }),
+    // multer.diskStorage({
+    //     destination(req, file, done) {
+    //         done(null, 'uploads');
+    //     },
+    //     //파일명 뒤에 업로드 시간을 붙여줘서 같은 이미지를 올렸을때 발생하는 문제를 방지
+    //     filename(req, file, done) { //tony.png            
+    //         const ext = path.extname(file.originalname);    //확장자 추출(.png)
+    //         const basename = path.basename(file.originalname, ext); //tony
+    //         done(null, basename + '_' + new Data().getTime() + ext); //tony1451235.png
+    //     }
+    // }),
     limits: { fileSize: 20 * 1024 * 1024 }, //20MB
 });
 
