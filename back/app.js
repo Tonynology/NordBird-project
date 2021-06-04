@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === 'production') {
 //     origin: '*',
 // }));
 
-// app.use('/', express.static(path.join(__dirname, 'uploads')));
+app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());    //axios 보낼때
 app.use(express.urlencoded({ extended: true }));    //읿반 form을 보낼때 (image가있는 form은 아님)
 app.use(cookieParser(process.env.COOKIE_SECRET));
