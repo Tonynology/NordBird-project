@@ -27,13 +27,13 @@ AWS.config.update({
 //app.js에다가 하면 모든 라우터에 공통 적용 되기 때문에, multer는 라우더마다 별도의 세팅을 한다. 
 const upload = multer({
     storage: 
-    // multerS3({
-    //     s3: new AWS.S3(),
-    //     bucket: '...',
-    //     key(req, file, cb) {
-    //         cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
-    //     }
-    // }),
+    multerS3({
+        s3: new AWS.S3(),
+        bucket: 'react-blueboard-s3',
+        key(req, file, cb) {
+            cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
+        }
+    }),
     
     multer.diskStorage({
         destination(req, file, done) {
