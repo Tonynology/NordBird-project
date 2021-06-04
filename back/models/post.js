@@ -20,7 +20,7 @@ module.exports = class Post extends Model {//MySQL에는 posts 테이블 생성.
 
     static associate(db) {
         db.Post.belongsTo(db.User);
-        db.Post.belongsToMany(db.Hashtag, { through: 'PosthHashtag' });
+        db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' });
         db.Post.hasMany(db.Comment);
         db.Post.hasMany(db.Image);
         db.Post.belongsToMany(db.User, { through: 'Like', as: 'Likers' });  //사용자와 게시글의 좋아요 관계({ through: 'Like' }) 를 넣어서 중간 테이블 관계 이름을 설정
