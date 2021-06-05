@@ -16,7 +16,7 @@ const PostImages = ({ images }) => {
         return (
             <div>
                 {/* //role="presentation" 는 이미지 reader한테 누를 필요 없는 기능들을 알려줌. */}
-                <img role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[0].src} onClick={onZoom} /> 
+                <img role="presentation" src={`${images[0].src}`} alt={images[0].src} onClick={onZoom} /> 
                 {showImageZoom && <ImagesZoom images={images} onClose={onClise} />}
             </div>
         );
@@ -25,8 +25,8 @@ const PostImages = ({ images }) => {
         return (
             <div>
                 {/* //role="presentation" 는 이미지 reader한테 누를 필요 없는 기능들을 알려줌.  각 이미지 width를 절반씩.*/}
-                <img role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[0].src} width="50%" onClick={onZoom} />
-                <img role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[1].src} width="50%" onClick={onZoom} />
+                <img role="presentation" src={`${images[0].src}`} alt={images[0].src} width="50%" onClick={onZoom} />
+                <img role="presentation" src={`${images[0].src}`} alt={images[1].src} width="50%" onClick={onZoom} />
                 {showImageZoom && <ImagesZoom image={images} onClose={onClise} />}
             </div>
         );
@@ -37,7 +37,7 @@ const PostImages = ({ images }) => {
                 <img role="presentation" width="50%" src={images[0].src} alt={images[0].src} onClick={onZoom} /> 
                 <div
                     role="presentation"
-                    src={`${backUrl}/${images[0].src}`}
+                    src={`${images[0].src}`}
                     style={{ display: 'inline-block', width: '50%', textAlign:'center', verticalAlign:'middle'}}
                     onClick={onZoom}
                 >
