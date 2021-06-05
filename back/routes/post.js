@@ -99,7 +99,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {  //POST 
 
 
 //upload.array는 여러장 올릴때. .single은 한장 올릴때, .none은 text만 있을때
-router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => {  //POST /post/images
+router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {  //POST /post/images
     console.log(req.files);
     res.json(req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')));
 });
