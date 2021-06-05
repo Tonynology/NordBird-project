@@ -85,7 +85,7 @@ const PostForm = () => {
             <div>
                 {imagePaths.map((v, i) => ( //map안에 콜백함수에 데이터를 넣고싶으면 고차함수를 사용.
                     <div key={v} style={{ display: 'inline-block' }}>
-                        <img src={v.replace('/thumb/', /\/original\//)} style={{ width: '200px' }} alt={v} />
+                        <img src={v.replace(/\/thumb\//,  /\/original\//)} style={{ width: '200px' }} alt={v} />
                         <div>
                             <Button onClick={onRemoveImage(i)}>Delete</Button>
                         </div>
