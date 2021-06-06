@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { UPDATE_POST_REQUEST } from '../reducers/post';
@@ -46,6 +46,7 @@ const PostCardContent = ({ postData, editMode, onCancelUpdate, onChangePost }) =
 PostCardContent.propTypes = {
   postData: PropTypes.string.isRequired,
   editMode: PropTypes.bool,
+  onCancelUpdate: PropTypes.func.isRequired,
   onCancelUpdate: PropTypes.func.isRequired,
 };
 
