@@ -27,6 +27,9 @@ import {
     UNLIKE_POST_FAILURE,
     UNLIKE_POST_REQUEST,
     UNLIKE_POST_SUCCESS,
+    UPDATE_POST_FAILURE,
+    UPDATE_POST_REQUEST,
+    UPDATE_POST_SUCCESS,
     REMOVE_POST_FAILURE,
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
@@ -229,8 +232,29 @@ function* loadPost(action) {
     }    
 }
 
+function updatePostAPI(data) {
+    return axios.patch(`/post/${data.PostId}`, data);
+}
+
+function* updatePost(action) {
+    try {
+        const result = yield call(updatePostAPI, action.data);    //call을 쓰면 동기, fork를 쓰면 비동기. result값을 받고 진행해야 하므로 call을 사용.
+
+        yield put({         //post reducer 조작 부분
+            type: UPDATE_POST_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: UPDATE_POST_FAILURE,
+            error: err.response.data
+        })
+    }    
+}
+
 function removePostAPI(data) {
-    return axios.post(`/post/${data}`)
+    return axios.post(`/post/${data}`);
 }
 
 function* removePost(action) {
@@ -311,6 +335,10 @@ function* watchLoadPost() {
     yield throttle(5000, LOAD_POST_REQUEST, loadPost);
 }
 
+function* watchUpdatePost() {
+    yield takeLatest(UPDATE_POST_REQUEST, updatePost);
+}
+
 function* watchRemovePost() {
     yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
@@ -330,6 +358,7 @@ export default function* postSaga() {
         fork(watchLoadHashtagPosts),
         fork(watchLoadPosts),
         fork(watchLoadPost),
+        fork(watchUpdatePost),
         fork(watchRemovePost),
         fork(watchAddComment),
     ]);
