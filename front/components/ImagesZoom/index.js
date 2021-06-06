@@ -15,31 +15,32 @@ const ImagesZoom = ({ images, onClose }) => {
                 <h1>image details</h1>
                 <CloseBtn onClick={onClose}>X</CloseBtn>
             </Header>
-            <SlickWrapper></SlickWrapper>
-            <div>
-                <Slick 
-                    initialSlide={0}
-                    afterChange={(slide) => setCurrentSlide(slide)}
-                    infinite
-                    arrows={false}
-                    slideToShow={1}
-                    slidesToScroll={1}
-                >
-                    {images.map((v) => (
-                        <ImgWrapper key={v.src}>
-                            <img src={`${v.src.replace('/thumb/', /\/original\//)}`} alt={v.src} />
-                        </ImgWrapper>
-                    ))}
-                </Slick>
-                <Indicator>
-                    <div>
-                        {currentSlide + 1}
-                        {' '}
-                        /
-                        {images.length}
-                    </div>
-                </Indicator>
-            </div>
+            <SlickWrapper>
+                <div>
+                    <Slick 
+                        initialSlide={0}
+                        beforeChange={(slide, newSlide) => setCurrentSlide(newSlide)}
+                        infinite
+                        arrows={false}
+                        slidesToShow={1}
+                        slidesToScroll={1}
+                    >
+                        {images.map((v) => (
+                            <ImgWrapper key={v.src}>
+                                <img src={`${v.src.replace(/\/thumb\//, '/original/')}`} alt={v.src} />
+                            </ImgWrapper>
+                        ))}
+                    </Slick>
+                    <Indicator>
+                        <div>
+                            {currentSlide + 1}
+                            {' '}
+                            /
+                            {images.length}
+                        </div>
+                    </Indicator>
+                </div>
+            </SlickWrapper>
         </Overlay>
     );
 }
