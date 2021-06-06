@@ -11,6 +11,10 @@ const PostImages = ({ images }) => {
     const onZoom = useCallback(() => {  //이미지를 확대해서 볼수 있도록. (케루셀)
         setShowImageZoom(true);
     }, []);
+    const onClose = useCallback(() => {
+        setShowImageZoom(false);
+    }, []);
+
     // postcard.js에서 이미지 0일땐 props가 오지 않도록 설정함. 
     if (images.length === 1) {
         return (
