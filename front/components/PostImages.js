@@ -17,7 +17,7 @@ const PostImages = ({ images }) => {
             <div>
                 {/* //role="presentation" 는 이미지 reader한테 누를 필요 없는 기능들을 알려줌. */}
                 <img role="presentation" src={`${images[0].src}`} alt={images[0].src} onClick={onZoom} /> 
-                {showImageZoom && <ImagesZoom images={images} onClose={onClise} />}
+                {showImageZoom && <ImagesZoom images={images} onClose={onClose} />}
             </div>
         );
     }
@@ -27,7 +27,7 @@ const PostImages = ({ images }) => {
                 {/* //role="presentation" 는 이미지 reader한테 누를 필요 없는 기능들을 알려줌.  각 이미지 width를 절반씩.*/}
                 <img role="presentation" src={`${images[0].src}`} alt={images[0].src} width="50%" onClick={onZoom} />
                 <img role="presentation" src={`${images[0].src}`} alt={images[1].src} width="50%" onClick={onZoom} />
-                {showImageZoom && <ImagesZoom image={images} onClose={onClise} />}
+                {showImageZoom && <ImagesZoom image={images} onClose={onClose} />}
             </div>
         );
     }
