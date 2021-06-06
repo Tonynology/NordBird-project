@@ -14,7 +14,7 @@ import wrapper from '../store/configureStore';
 
 const ErrorMessage = styled.div`
     color: red;
-`
+`;
 
 const Signup = () => {
     const dispatch = useDispatch();
@@ -61,45 +61,45 @@ const Signup = () => {
             return setPasswordError(true);
         }
         if (!term) {
-            return setTermError(true)
+            return setTermError(true);
         }
         console.log(email, nickname, password);
         dispatch({
             type: SIGN_UP_REQUEST,
             data: { email, password, nickname },
-        })
+        });
     }, [email, password, passwordCheck, term]);
 
     return (
         <AppLayout>
             <Head>
-                <title>Sign up| NodeBird</title>
+                <title>Sign up| Blueboard</title>
             </Head>
             <Form onFinish={onSubmit}>
                 <div>
                     <label htmlFor="user-email">Email</label>
                     <br/>
-                    <Input name="user-email" type="email" value={email} onChange={onChangeEmail} required />
+                    <Input name="user-email" type="email" value={email} required onChange={onChangeEmail} required />
                 </div>
                 <div>
                     <label htmlFor="user-nick">Nickname</label>
                     <br/>
-                    <Input name="user-nick" value={nickname} onChange={onChangeNickname} required />
+                    <Input name="user-nick" value={nickname} required onChange={onChangeNickname} required />
                 </div>
                 <div>
                     <label htmlFor="user-password">Password</label>
                     <br/>
-                    <Input name="user-password" value={password} onChange={onChangePassword} required />
+                    <Input name="user-password" value={password} required onChange={onChangePassword} required />
                 </div>
                 <div>
-                    <label htmlFor="user-password-check">password</label>
+                    <label htmlFor="user-password-check">Password Check</label>
                     <br/>
                     <Input 
                         name="user-password-check" 
                         type="password" 
                         value={passwordCheck} 
+                        required                         
                         onChange={onChangePasswordCheck} 
-                        required 
                     />
                     {passwordError && <ErrorMessage>password is not matched</ErrorMessage>}
                 </div>

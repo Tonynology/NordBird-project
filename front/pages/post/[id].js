@@ -3,6 +3,7 @@ import React from 'react';
 import { END } from '@redux-saga/core';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import Head from 'next/head';
 
 import { useRouter } from 'next/router';
 import AppLayout from '../../components/AppLayout';
@@ -34,8 +35,8 @@ const Post = () => {
     );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(async (context ) => {
-    console.log('getServerSideProps start');
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+    // console.log('getServerSideProps start');
     const cookie = context.req ? context.req.headers.cookie : '';
     axios.defaults.headers.Cookie = '';       
     //서버에서 쿠키가 공유가 되기때문에 로그인이 공유되는 문제가 발생하기때문에 이런식으로 쿠키를 지웠다가 채운다.
@@ -50,7 +51,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context ) =>
         data: context.params.id,
     });
     context.store.dispatch(END);
-    console.log('getServerSideProps end');
+    // console.log('getServerSideProps end');
     await context.store.sagaTask.toPromise();
 });
 

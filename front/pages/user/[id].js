@@ -17,7 +17,7 @@ const User = () => {
   const router = useRouter();
   const { id } = router.query;
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, me } = useSelector((state) => state.user);
 
   useEffect(() => {
     const onScroll = () => {
@@ -52,7 +52,7 @@ const User = () => {
           <meta property="og:url" content={`https://blueboard.online/user/${id}`} />
         </Head>
       )}
-      {userInfo
+      {userInfo && (userInfo.id !== me?.id)
         ? (
           <Card
             actions={[
@@ -80,7 +80,9 @@ const User = () => {
           </Card>
         )
         : null}
-      {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
+      {mainPosts.map((c) => (
+      <PostCard key={c.id} post={c} />
+      ))}
     </AppLayout>
   );
 };
@@ -104,8 +106,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   });
   context.store.dispatch(END);
   await context.store.sagaTask.toPromise();
-  console.log('getState', context.store.getState().post.mainPosts);
-  return { props: {} };
+  // console.log('getState', context.store.getState().post.mainPosts);
+  // return { props: {} };
 });
 
 export default User;
