@@ -48,8 +48,8 @@ const User = () => {
           <meta name="description" content={`${userInfo.nickname}'s post`} />
           <meta property="og:title" content={`${userInfo.nickname}'s post`} />
           <meta property="og:description" content={`${userInfo.nickname}'s post`} />
-          <meta property="og:image" content="https://nodebird.com/favicon.ico" />
-          <meta property="og:url" content={`https://nodebird.com/user/${id}`} />
+          <meta property="og:image" content="https://blueboard.online/favicon.ico" />
+          <meta property="og:url" content={`https://blueboard.online/user/${id}`} />
         </Head>
       )}
       {userInfo
