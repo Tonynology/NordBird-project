@@ -15,23 +15,12 @@ import wrapper from '../store/configureStore';
 const fetcher = (url) => axios.get(url, { withCredentials: true }).then((result) => result.data);
 
 const Profile = () => {
-    const dispatch = useDispatch();
-
     const { me } = useSelector((state) => state.user);
     const [followersLimit, setFollowersLimit] = useState(3);
     const [followingsLimit, setFollowingsLimit] = useState(3);
 
-    const { data: followersData, error: followerError } = useSWR(`${backUrl}/user/followers?limit=${followersLimit}`, fetcher);
-    const { data: followingsData, error: followingError } = useSWR(`${backUrl}/user/followings?limit=${followingsLimit}`, fetcher);
-
-    // useEffect(() => {
-    //     dispatch({
-    //         type: LOAD_FOLLOWERS_REQUEST,
-    //     });
-    //     dispatch({
-    //         type: LOAD_FOLLOWERS_REQUEST,
-    //     });
-    // }, []);
+    const { data: followersData, error: followerError } = useSWR((me && me.id) ? `/user/followers?limit=${followersLimit}` : null, fetcher);
+    const { data: followingsData, error: followingError } = useSWR((me && me.id) ? `/user/followings?limit=${followingsLimit}` : null, fetcher);
 
     useEffect(() => {
         if (!(me && me.id)) {
@@ -52,7 +41,7 @@ const Profile = () => {
     }
     
     if (followerError || followingError) {  //return이 Hooks보다 위에있으면 안된다.
-        console.error(followingError || followingError);
+        console.error(followerError || followingError);
         return 'During loading, following / follower error is occured';
     }   
     
@@ -85,6 +74,5 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context ) =>
     console.log('getServerSideProps end');
     await context.store.sagaTask.toPromise();
 });
-
 
 export default Profile;
