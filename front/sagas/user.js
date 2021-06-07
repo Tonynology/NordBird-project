@@ -223,7 +223,7 @@ function* logIn(action) {
 }
 
 function logoutAPI() {
-    return axios.post('/logout')
+    return axios.post('/user/logout')
 }
 
 function* logOut() {
