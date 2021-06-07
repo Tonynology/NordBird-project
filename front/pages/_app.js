@@ -6,20 +6,20 @@ import withReduxSaga from 'next-redux-saga';
 
 import wrapper from '../store/configureStore';
 
-const NodeBird = ({ Component }) => {
+const Blueboard = ({ Component }) => {
     return (
         <div>
             <Head>
                 <meta charSet="utf-8" />
-                <title>NodeBird</title>
+                <title>Blueboard</title>
             </Head>
             <Component />
         </div>
     )
 };
 
-NodeBird.propType = {
+Blueboard.propType = {
     Component: PropType.elementType.isRequired,
 }
 
-export default wrapper.withRedux(withReduxSaga(NodeBird));
+export default wrapper.withRedux(withReduxSaga(Blueboard));

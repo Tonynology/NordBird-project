@@ -59,7 +59,7 @@ const Profile = () => {
     return(
         <div> 
             <Head>
-                <title>My Profile | NodeBird</title>
+                <title>My Profile | Blueboard</title>
             </Head>
             <AppLayout>
                 <NicknameEditForm />
