@@ -97,6 +97,6 @@ app.use('/hashtag', hashtagRouter);
 // app.listen(3065, () => {
 //     console.log('server running');
 // });
-app.listen(80, () => {
+app.listen(3065, () => {
     console.log('server running');
 });

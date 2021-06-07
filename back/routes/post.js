@@ -112,9 +112,6 @@ router.get('/:postId', async (req, res, next) => {  //GET /post/1
         if (!post) {
             return res.status(404).send('post is not exist');
         }
-        if (req.user.id === post.UserId || (post.Retweet && post.Retweet.UserId === req.user.id)) {
-            return res.status(403).send("You can't retweet your post!");
-        }
         const fullPost = await Post.findOne({
             where: { id: post.id },
             include: [{
@@ -140,12 +137,8 @@ router.get('/:postId', async (req, res, next) => {  //GET /post/1
                 include: [{
                     model: User,
                     attributes: ['id', 'nickname'],
-                }]
-            }, {
-                model: User,
-                as: 'Likers',
-                attributes: ['id'],
-            }]
+                }],
+            }],
         })
         res.status(200).json(fullPost);
     } catch (error) {
@@ -209,12 +202,8 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {  //POST 
                 include: [{
                     model: User,
                     attributes: ['id', 'nickname'],
-                }]
-            }, {
-                model: User,
-                as: 'Likers',
-                attributes: ['id'],
-            }]
+                }],
+            }],
         })
         res.status(201).json(retweetWithPrevPost);
     } catch (error) {

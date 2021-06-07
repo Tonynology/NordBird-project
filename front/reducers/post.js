@@ -39,7 +39,7 @@ export const initialState = {
     mainPosts: [],
     imagePaths: [],
     singlePost: null,
-    hasMorePost: true,
+    hasMorePosts: true,
     loadPostsLoading: false,
     loadPostsDone: false,
     loadPostsError: null,
@@ -186,7 +186,7 @@ const reducer = (state = initialState, action) => {
             case RETWEET_SUCCESS:{
                 draft.retweetLoading = false;
                 draft.retweetDone = true;   
-                draft.mainPosts.unshift(actino.data);             
+                draft.mainPosts.unshift(action.data);             
                 break;    
             }
             case RETWEET_FAILURE:
@@ -320,7 +320,7 @@ const reducer = (state = initialState, action) => {
                 draft.updatePostLoading = false;
                 draft.updatePostDone = true;                
                 draft.mainPosts.find((v) => v.id === action.data.PostId).content = action.data.content;
-                draft.imagePaths = [];
+                // draft.imagePaths = [];
                 break;
             case UPDATE_POST_FAILURE:
                 draft.updatePostLoading = false;

@@ -15,7 +15,7 @@ const PostForm = () => {
         if (addPostDone) {
             setText('');
         }
-    }, [addPostDone])
+    }, [addPostDone]);
 
     // const onChangeText = useCallback((e) => {
     //     setText(e.target.value);
@@ -31,9 +31,9 @@ const PostForm = () => {
         });
         formData.append('content', text);
         
-        for (const value of formData) {
-            console.log(value);
-        }
+        // for (const value of formData) {
+        //     console.log(value);
+        // }
         return dispatch({
             type: ADD_POST_REQUEST,
             data: formData,
@@ -52,9 +52,9 @@ const PostForm = () => {
             imageFormData.append('image', f);
         });
 
-        for (const value of imageFormData) {
-            console.log(value);
-        }
+        // for (const value of imageFormData) {
+        //     console.log(value);
+        // }
 
         dispatch({
             type: UPLOAD_IMAGES_REQUEST,
@@ -67,7 +67,7 @@ const PostForm = () => {
             type: REMOVE_IMAGE,
             data: index,
         });
-    });
+    }, []);
 
     return (
         <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
@@ -93,7 +93,7 @@ const PostForm = () => {
                 ))}
             </div>
         </Form>
-    )
+    );
 };
 
 export default PostForm;

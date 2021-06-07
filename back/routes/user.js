@@ -268,7 +268,7 @@ router.delete('/:userId/follow', isLoggedIn, async (req, res, next) => {   //DEL
 
 router.delete('/follower/:userId', isLoggedIn, async (req, res, next) => {   //DELETE /follow/2
     try {
-        const user = await User.findOne({ where: { UserId: parseInt(req.params.userId, 10) }});
+        const user = await User.findOne({ where: { id: req.params.userId }});
         if (!user) {
             res.status(403).send('The user is not exist.');
         }
